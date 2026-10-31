@@ -20,4 +20,4 @@ Flutter, Dio, Provider, GoRouter
 2. `flutter run -d chrome`
 
 ## Pembuat
-[Nama] - [NIM]
+[Muhammad Fahd Ar] - [240102072]

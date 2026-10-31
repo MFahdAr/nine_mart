@@ -1,10 +1,23 @@
-# 9mart (Flutter)
+# 9mart
 
-Setup:
-1. `flutter create --project-name nine_mart .`   (jalankan di folder ini; membuat folder android/ ios/ dll. tanpa menimpa lib/ & pubspec.yaml)
-2. Android: pastikan `android/app/src/main/AndroidManifest.xml` berisi
-   `<uses-permission android:name="android.permission.INTERNET"/>` di atas tag <application>.
-3. `flutter pub get`
-4. `flutter run`
+Aplikasi e-commerce sederhana berbasis Flutter yang mengambil data produk dari API DummyJSON.
 
-Kode promo untuk dicoba di keranjang: SMARTDELIGHT
+## Video Penjelasan dan Demo
+https://youtu.be/2Do4nYyV6yY?si=kxDUQwW83Q-4K5WZ
+
+## Fitur
+- Daftar produk dari API DummyJSON
+- Pencarian dan filter kategori
+- Wishlist
+- Keranjang dengan pengatur jumlah
+- Kode promo (SMARTDELIGHT)
+
+## Teknologi
+Flutter, Dio, Provider, GoRouter
+
+## Cara Menjalankan
+1. `flutter pub get`
+2. `flutter run -d chrome`
+
+## Pembuat
+[Nama] - [NIM]

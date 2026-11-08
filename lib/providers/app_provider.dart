@@ -81,7 +81,116 @@ class AppProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+    // ===== CRUD PRODUK =====
+  // Produk baru diberi ID lokal (>= 1000) karena DummyJSON tidak menyimpan data sungguhan
+  int _localIdCounter = 1000;
+  static const String _placeholderImage =
+      'https://placehold.co/400x400/png?text=9mart';
 
+  Future<bool> addProduct({
+    required String title,
+    required double price,
+    required String category,
+    required String description,
+    required int stock,
+  }) async {
+    try {
+      await _api.addProduct({
+        'title': title,
+        'price': price,
+        'category': category,
+        'description': description,
+        'stock': stock,
+      });
+      _products.insert(
+        0,
+        Product(
+          id: _localIdCounter++,
+          title: title,
+          description: description,
+          category: category,
+          price: price,
+          stock: stock,
+          thumbnail: _placeholderImage,
+        ),
+      );
+      _errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updateProduct(
+    Product old, {
+    required String title,
+    required double price,
+    required String category,
+    required String description,
+    required int stock,
+  }) async {
+    try {
+      // Produk lokal (id >= 1000) tidak ada di server, jadi hanya diubah lokal
+      if (old.id < 1000) {
+        await _api.updateProduct(old.id, {
+          'title': title,
+          'price': price,
+          'category': category,
+          'description': description,
+          'stock': stock,
+        });
+      }
+      final updated = Product(
+        id: old.id,
+        title: title,
+        description: description,
+        category: category,
+        price: price,
+        discountPercentage: old.discountPercentage,
+        rating: old.rating,
+        stock: stock,
+        brand: old.brand,
+        thumbnail: old.thumbnail,
+        images: old.images,
+      );
+      final i = _products.indexWhere((p) => p.id == old.id);
+      if (i != -1) _products[i] = updated;
+      final w = _wishlist.indexWhere((p) => p.id == old.id);
+      if (w != -1) _wishlist[w] = updated;
+      final c = _cart.indexWhere((item) => item.product.id == old.id);
+      if (c != -1) {
+        _cart[c] = CartItem(product: updated, quantity: _cart[c].quantity);
+      }
+      _errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteProduct(int id) async {
+    try {
+      if (id < 1000) {
+        await _api.deleteProduct(id);
+      }
+      _products.removeWhere((p) => p.id == id);
+      _wishlist.removeWhere((p) => p.id == id);
+      _cart.removeWhere((item) => item.product.id == id);
+      _errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
   // Wishlist Methods
   bool isInWishlist(Product product) {
     return _wishlist.any((p) => p.id == product.id);

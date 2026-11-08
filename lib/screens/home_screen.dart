@@ -41,6 +41,10 @@ class HomeScreen extends StatelessWidget {
             ),
           )
         ],
+      ),      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.deepBlue,
+        onPressed: () => context.push('/product-form'),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       body: RefreshIndicator(
         onRefresh: () => provider.initData(),

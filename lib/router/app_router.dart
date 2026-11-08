@@ -4,6 +4,7 @@ import '../screens/home_screen.dart';
 import '../screens/detail_screen.dart';
 import '../screens/wishlist_screen.dart';
 import '../screens/cart_screen.dart';
+import '../screens/product_form_screen.dart';
 import '../models/app_models.dart';
 import '../theme/app_theme.dart';
 
@@ -45,9 +46,15 @@ final GoRouter appRouter = GoRouter(
         final product = state.extra as Product;
         return DetailScreen(product: product);
       },
+    ),    GoRoute(
+      path: '/product-form',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) =>
+          ProductFormScreen(product: state.extra as Product?),
     ),
   ],
-);
+); 
+
 
 class MainNavigationShell extends StatelessWidget {
   final Widget child;

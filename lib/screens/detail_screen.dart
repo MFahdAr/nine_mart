@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/app_models.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 
 class DetailScreen extends StatefulWidget {
   final Product product;
@@ -17,6 +18,34 @@ class _DetailScreenState extends State<DetailScreen> {
   int quantity = 1;
   int selectedShade = 0;
 
+    Future<void> _confirmDelete() async {
+    final provider = context.read<AppProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+
+    final yes = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Hapus Produk'),
+        content: Text('Yakin ingin menghapus "${widget.product.title}"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Batal')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (yes != true) return;
+
+    final ok = await provider.deleteProduct(widget.product.id);
+    messenger.showSnackBar(SnackBar(
+      content: Text(ok ? 'Produk berhasil dihapus' : 'Gagal menghapus produk'),
+    ));
+    if (ok) router.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppProvider>(context);
@@ -26,6 +55,14 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: const Text('Detail Produk'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () => context.push('/product-form', extra: widget.product),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.red),
+            onPressed: _confirmDelete,
+          ),
           IconButton(
             icon: Icon(isFav ? Icons.favorite : Icons.favorite_border, color: isFav ? Colors.red : AppColors.deepBlue),
             onPressed: () => provider.toggleWishlist(widget.product),

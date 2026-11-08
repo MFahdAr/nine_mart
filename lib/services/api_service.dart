@@ -40,4 +40,18 @@ class ApiServiceProducts {
     final List list = response.data['products'];
     return list.map((e) => Product.fromJson(e)).toList();
   }
+    // 6. CREATE
+  Future<void> addProduct(Map<String, dynamic> data) async {
+    await _dio.post('/products/add', data: data);
+  }
+
+  // 7. UPDATE
+  Future<void> updateProduct(int id, Map<String, dynamic> data) async {
+    await _dio.put('/products/$id', data: data);
+  }
+
+  // 8. DELETE
+  Future<void> deleteProduct(int id) async {
+    await _dio.delete('/products/$id');
+  }
 }

@@ -19,5 +19,14 @@ Flutter, Dio, Provider, GoRouter
 1. `flutter pub get`
 2. `flutter run -d chrome`
 
+## Fitur CRUD Produk
+- Create: tambah produk (POST /products/add)
+- Read: daftar & detail produk (GET /products)
+- Update: edit produk (PUT /products/{id})
+- Delete: hapus produk (DELETE /products/{id})
+
+Backend: DummyJSON (https://dummyjson.com). DummyJSON mensimulasikan penulisan data,
+sehingga perubahan ditampilkan lewat state lokal dan akan kembali saat data dimuat ulang.
+
 ## Pembuat
 [Muhammad Fahd Ar] - [240102072]
